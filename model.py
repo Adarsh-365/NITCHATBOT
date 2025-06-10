@@ -12,7 +12,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
-from langchain.chains.question_answering import load_qa_chain
+from langchain.chains.question_answering import load_qa_chain as original_load_qa_chain
 from groq import Groq
 from langchain_groq import ChatGroq
 llm = ChatGroq(
@@ -23,8 +23,5 @@ llm = ChatGroq(
 )
 
 # Export the load_qa_chain function to be used in index.py
-def load_qa_chain_wrapper(llm_model):
-    return load_qa_chain(llm_model)
-
-# Make the function directly accessible
-load_qa_chain = load_qa_chain_wrapper
+def load_qa_chain(llm_model):
+    return original_load_qa_chain(llm_model)
