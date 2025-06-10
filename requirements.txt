@@ -4,3 +4,4 @@ dotenv
 langchain_huggingface
 streamlit
 langchain_groq
+langchain-community
