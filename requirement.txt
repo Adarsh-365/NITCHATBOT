@@ -1,0 +1,6 @@
+PyPDF2 
+langchain
+dotenv
+langchain_huggingface
+streamlit
+langchain_groq
