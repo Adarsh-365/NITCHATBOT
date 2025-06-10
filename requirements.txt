@@ -5,3 +5,5 @@ langchain_huggingface
 streamlit
 langchain_groq
 langchain-community
+faiss-cpu
+tiktoken
