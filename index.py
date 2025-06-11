@@ -68,7 +68,7 @@ if user_input:
                 docs = st.session_state.document_search.similarity_search(user_input)
                 response = chain.run(input_documents=docs, question=user_input)
             else:
-                response = f"This is a demo response to: {user_input}"
+               response = chain.run(question=user_input)
             
             # Simulate typing effect
             full_response = ""
