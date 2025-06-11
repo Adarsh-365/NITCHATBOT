@@ -4,7 +4,7 @@ import PyPDF2
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS
 # Page config
-from model import embeddings, llm, load_qa_chain
+from model import embeddings, llm, load_qa_chain,api_key 
 
 st.set_page_config(
     page_title="AI Chatbot",
@@ -83,6 +83,10 @@ if user_input:
 # Sidebar with instructions and PDF upload
 with st.sidebar:
     st.subheader("About")
+    if api_key=="":
+        st.write("No api key provided.")
+    else:
+        st.write("api key provided.")
     st.write("This is a simple chatbot UI template.")
     st.write("Ask questions to see the interface in action!")
     
