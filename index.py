@@ -5,6 +5,7 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS
 # Page config
 from model import embeddings, llm, load_qa_chain,api_key 
+import os
 
 st.set_page_config(
     page_title="AI Chatbot",
@@ -24,6 +25,20 @@ if "pdf_names" not in st.session_state:
 
 if "document_search" not in st.session_state:
     st.session_state.document_search = None
+
+# Path to pre-built FAISS index directory
+FAISS_INDEX_PATH = "faiss_index"
+
+# Load FAISS index from disk if available
+if "document_search" not in st.session_state or st.session_state.document_search is None:
+    if os.path.exists(FAISS_INDEX_PATH):
+        try:
+            st.session_state.document_search = FAISS.load_local(FAISS_INDEX_PATH, embeddings)
+            st.info("Loaded pre-built FAISS index from disk.")
+        except Exception as e:
+            st.warning(f"Could not load FAISS index: {e}")
+    else:
+        st.session_state.document_search = None
 
 # Function to extract text from PDF
 def extract_text_from_pdf(pdf_file):
