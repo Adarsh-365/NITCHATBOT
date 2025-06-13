@@ -33,7 +33,10 @@ FAISS_INDEX_PATH = "faiss_index"
 if "document_search" not in st.session_state or st.session_state.document_search is None:
     if os.path.exists(FAISS_INDEX_PATH):
         try:
-            st.session_state.document_search = FAISS.load_local(FAISS_INDEX_PATH, embeddings)
+           
+            st.session_state.document_search = FAISS.load_local(
+                FAISS_INDEX_PATH, embeddings, allow_dangerous_deserialization=True
+            )
             st.info("Loaded pre-built FAISS index from disk.")
         except Exception as e:
             st.warning(f"Could not load FAISS index: {e}")
