@@ -8,7 +8,7 @@ from model import embeddings, llm, load_qa_chain,api_key
 import os
 
 st.set_page_config(
-    page_title="AI Chatbot",
+    page_title="NIT Warangal Chatbot",
     page_icon="🤖",
     layout="centered"
 )
@@ -61,7 +61,7 @@ def extract_text_from_txt(txt_file):
 chain = load_qa_chain(llm)
 
 # App title
-st.title("🤖 AI Chatbot")
+st.title("🤖 NIT Warangal Chatbot")
 
 # Display chat messages
 for message in st.session_state.messages:
@@ -69,7 +69,7 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 # User input
-user_input = st.chat_input("Ask something...")
+user_input = st.chat_input("Ask something about NIT Warangal...")
 
 if user_input:
     # Add user message to chat history
@@ -106,16 +106,16 @@ if user_input:
 with st.sidebar:
     st.subheader("About")
     if api_key=="":
-        st.write("No api key provided.")
+        st.write("No API key provided.")
     else:
-        st.write("api key provided.")
-    st.write("This is a simple chatbot UI template.")
-    st.write("Ask questions to see the interface in action!")
+        st.write("API key provided.")
+    st.write("This is the official chatbot UI for NIT Warangal.")
+    st.write("Ask questions about NIT Warangal to see the interface in action!")
     
     # PDF and TXT Upload section
-    st.subheader("Upload PDF or Text Documents")
+    st.subheader("Upload  Documents")
     uploaded_files = st.file_uploader(
-        "Upload PDF or TXT files to chat about their content", 
+        "Upload PDF or TXT files related to NIT Warangal to chat about their content", 
         type=["pdf", "txt"],
         accept_multiple_files=True
     )
@@ -159,7 +159,7 @@ with st.sidebar:
     
     # Display currently loaded files
     if st.session_state.pdf_names:
-        st.subheader("Loaded Files")
+        st.subheader("Loaded NIT Warangal Files")
         for file_name in st.session_state.pdf_names:
             st.write(f"- {file_name}")
         
