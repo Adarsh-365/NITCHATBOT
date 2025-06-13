@@ -35,6 +35,10 @@ def extract_text_from_pdf(pdf_file):
             raw_text += content
     return raw_text
 
+# Function to extract text from TXT file
+def extract_text_from_txt(txt_file):
+    return txt_file.read().decode("utf-8")
+
 # Initialize QA chain
 chain = load_qa_chain(llm)
 
@@ -80,7 +84,7 @@ if user_input:
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
 
-# Sidebar with instructions and PDF upload
+# Sidebar with instructions and PDF/text upload
 with st.sidebar:
     st.subheader("About")
     if api_key=="":
@@ -90,31 +94,37 @@ with st.sidebar:
     st.write("This is a simple chatbot UI template.")
     st.write("Ask questions to see the interface in action!")
     
-    # PDF Upload section
-    st.subheader("Upload PDF Documents")
-    uploaded_pdfs = st.file_uploader(
-        "Upload PDF files to chat about their content", 
-        type="pdf",
+    # PDF and TXT Upload section
+    st.subheader("Upload PDF or Text Documents")
+    uploaded_files = st.file_uploader(
+        "Upload PDF or TXT files to chat about their content", 
+        type=["pdf", "txt"],
         accept_multiple_files=True
     )
     
-    if uploaded_pdfs:
+    if uploaded_files:
         all_texts = []
-        for pdf in uploaded_pdfs:
-            # Check if this PDF has already been processed
-            if pdf.name not in st.session_state.pdf_names:
+        for file in uploaded_files:
+            # Check if this file has already been processed
+            if file.name not in st.session_state.pdf_names:
                 try:
-                    # Extract text from PDF
-                    raw_text = extract_text_from_pdf(pdf)
-                    
-                    # Store the PDF text and name
+                    # Extract text based on file type
+                    if file.type == "application/pdf":
+                        raw_text = extract_text_from_pdf(file)
+                    elif file.type == "text/plain":
+                        raw_text = extract_text_from_txt(file)
+                    else:
+                        st.warning(f"Unsupported file type: {file.name}")
+                        continue
+
+                    # Store the file text and name
                     st.session_state.pdf_texts.append(raw_text)
-                    st.session_state.pdf_names.append(pdf.name)
+                    st.session_state.pdf_names.append(file.name)
                     all_texts.append(raw_text)
                     
-                    st.success(f"Processed: {pdf.name}")
+                    st.success(f"Processed: {file.name}")
                 except Exception as e:
-                    st.error(f"Error processing {pdf.name}: {str(e)}")
+                    st.error(f"Error processing {file.name}: {str(e)}")
         
         if all_texts:
             # Process all texts together
@@ -129,14 +139,14 @@ with st.sidebar:
             texts = text_splitter.split_text(combined_text)
             st.session_state.document_search = FAISS.from_texts(texts, embeddings)
     
-    # Display currently loaded PDFs
+    # Display currently loaded files
     if st.session_state.pdf_names:
-        st.subheader("Loaded PDFs")
-        for pdf_name in st.session_state.pdf_names:
-            st.write(f"- {pdf_name}")
+        st.subheader("Loaded Files")
+        for file_name in st.session_state.pdf_names:
+            st.write(f"- {file_name}")
         
-        # Option to clear loaded PDFs
-        if st.button("Clear PDFs"):
+        # Option to clear loaded files
+        if st.button("Clear Files"):
             st.session_state.pdf_texts = []
             st.session_state.pdf_names = []
             st.session_state.document_search = None
