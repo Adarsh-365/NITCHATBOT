@@ -88,7 +88,7 @@ if user_input:
             # This is where you would call your AI model
             if st.session_state.document_search:
                 docs = st.session_state.document_search.similarity_search(user_input)
-                response = chain.run(input_documents=docs, question=user_input)
+                "FROM DOC" + response = chain.run(input_documents=docs, question=user_input)
             else:
                    response = chain.run(input_documents=[], question=user_input)
             
